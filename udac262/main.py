@@ -51,7 +51,7 @@ if __name__ == '__main__':
         return token
     
     def t_RANGLE(token):
-        r'>'
+        r'>' 
         return token
     
     def t_EQUAL(token):
@@ -80,6 +80,20 @@ if __name__ == '__main__':
     def t_eolcomment(token):
         r'//[^\n]*'
         pass
+    
+    # Grammar stuff
+    grammar = [
+               ("exp", ["exp", "+", "exp"]),
+               ("exp", ["exp", "-", "exp"]),
+               ("exp", ["(", "exp", ")"]),
+               ("exp", ["num"]),
+               ]
+    
+    def expand(tokens, grammar):
+        for pos in range(len(tokens)): # for every token
+            for rule in grammar: # compare for every rule in the grammar
+                if tokens[pos]==rule[0]:
+                    yield tokens[0:pos] + rule[1] + tokens[pos+1:]
         
     htmllexer = lex.lex()
     htmllexer.input(webpage)
@@ -87,3 +101,5 @@ if __name__ == '__main__':
         tok = htmllexer.token()
         if not tok: break
         print tok
+    
+    
